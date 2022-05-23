@@ -1,3 +1,5 @@
+import pandas as pd
+
 def binarize_labels(label_df: pd.DataFrame, threshold: tuple, values_to_return: tuple = (-1,1))->pd.DataFrame:
   """
   This functions binarize the labels in the 'label_df' according to the given threshold.
