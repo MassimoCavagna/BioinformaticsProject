@@ -73,9 +73,47 @@ def imputation(epig: dict, f: Callable, knn : bool = False, n_neighbors : int = 
 
 ################################################################################
 
+#robust_zscoring Functions
+
 def robust_zscoring(df:pd.DataFrame)->pd.DataFrame:
     return pd.DataFrame(
         RobustScaler().fit_transform(df.values),
         columns=df.columns,
         index=df.index
     )
+
+################################################################################
+
+# Constant features
+
+def drop_constant_features(df:pd.DataFrame)->pd.DataFrame:
+    """
+    Retrieve a list of boolean, one for each feature (column) that if it is True the feature is 
+    constant among all rows.
+    The list is used to filter the features
+
+    Params:
+      df: the dataframe what will be cchecked
+    
+    Return:
+      The dataframe without the constante features
+    """
+    
+    return df.loc[:, (df != df.iloc[0]).any()]
+
+def constant_features(epig: dict):
+  """
+    Check for each dataframe if there are constant features and drop them
+
+    Params:
+      epig: the dictionary
+  """
+  print("Datasets with cosntant features:")
+  for key in epig.keys():
+    original = epig[key].shape[1]
+    dropped = drop_constant_features(epig[key])
+    if(original != dropped.shape[1]):
+      print(f"{key}: {original}-->{dropped}")
+      print("="*50)
+    epig[key] = dropped
+  
