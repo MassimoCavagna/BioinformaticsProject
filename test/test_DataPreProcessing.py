@@ -85,4 +85,14 @@ def test_constant_features():
       }
   assert all([d[k].equals(d_check[k]) for k in d.keys()])
 
+def test_over_sampling():
+  df_x = pd.DataFrame([[i for _ in range(10)] for i in range(100)])
+  df_y = pd.DataFrame([-1 for _ in range(90)] + [1 for _ in range(10)])
+  
+  _, y = dp.over_sampling(df_x.values, df_y.values, 1/4)
+  _, y2 = dp.over_sampling(df_x.values, df_y.values, 1/4, "SMOTEENN")
 
+  v = ( sum( (y2==1) ) / ( sum(y2==-1) ) )
+  assert (sum( (y==1) ) == int(1/4 * ( sum(y==-1) )) and
+          round(v, 1) == round(1/4, 1)
+         )
