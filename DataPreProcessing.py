@@ -1,4 +1,5 @@
 import pandas as pd
+import numpy as np
 from sklearn.impute import KNNImputer
 from sklearn.preprocessing import RobustScaler
 from typing import Callable
@@ -116,15 +117,12 @@ def constant_features(epig: dict):
       print(f"{key}: {original}-->{dropped}")
       print("="*50)
     epig[key] = dropped
-
+  
 ################################################################################
-
-# Oversampling
-
 from imblearn.over_sampling import RandomOverSampler
 from imblearn.combine import SMOTEENN
 
-def over_sampling(X : np.array, y : np.array, method : str = "Random"):
+def over_sampling(X : np.array, y : np.array, balance_ratio : float = 1/10, method : str = "Random"):
   """
     Perform oversampling and undersampling on the passed dataframes, 
     looking at y in order to check for which class is the minority
@@ -133,15 +131,16 @@ def over_sampling(X : np.array, y : np.array, method : str = "Random"):
     Params:
       X: the values of a dataframe that will be resampled
       y: the values of the labels of the relative rows
-
+      balance_ratio: the balance ratio at which the resampling must achieve
+      method: which method use (Random, SMOTEENN)
     Return:
       The resampled X and y
   """
   if method == "Random":
-    ros = RandomOverSampler(sampling_strategy = 1/10, random_state=0)
+    ros = RandomOverSampler(sampling_strategy = balance_ratio, random_state=0)
     X_resampled, y_resampled = ros.fit_resample(X, y)
   else:
-    smote_enn = SMOTEENN(sampling_strategy = 1/10, random_state=0)
+    smote_enn = SMOTEENN(sampling_strategy = balance_ratio, random_state=0)
     X_resampled, y_resampled = smote_enn.fit_resample(X, y)
     
   return X_resampled, y_resampled
