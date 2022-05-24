@@ -71,3 +71,10 @@ def imputation(epig: dict, f: Callable, knn : bool = False, n_neighbors : int = 
   return epig
 
 ################################################################################
+
+def robust_zscoring(df:pd.DataFrame)->pd.DataFrame:
+    return pd.DataFrame(
+        RobustScaler().fit_transform(df.values),
+        columns=df.columns,
+        index=df.index
+    )
