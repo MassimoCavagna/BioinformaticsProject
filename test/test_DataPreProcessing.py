@@ -71,3 +71,18 @@ def test_robust_zscoring():
   check_df = pd.DataFrame([[-1.,0.,1.], [0.,2.,0.], [1.,0., -1.]])
 
   assert df.equals(check_df)
+
+def test_constant_features():
+  d = {
+       "promoters" : pd.DataFrame([[10, 15, 10], [10, 30, 0], [10, 10, -10]], columns = ["a", "b", "c"]),
+       "enhancers" : pd.DataFrame([[10, 15, 11], [7, 30, 10], [10, 10, 10]], columns = ["a", "b", "c"])
+      }
+  dp.constant_features(d)
+
+  d_check = d = {
+       "promoters" : pd.DataFrame([[15, 10], [30, 0], [10, -10]], columns = ["b", "c"]),
+       "enhancers" : pd.DataFrame([[10, 15, 11], [7, 30, 10], [10, 10, 10]], columns = ["a", "b", "c"])
+      }
+  assert all([d[k].equals(d_check[k]) for k in d.keys()])
+
+
