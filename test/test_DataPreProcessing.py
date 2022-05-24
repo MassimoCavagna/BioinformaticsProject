@@ -63,4 +63,11 @@ def test_imputation():
           all([result_knn[k].equals(check_result_knn[k]) for k in dic.keys()])
          )
 
+def test_robust_zscoring():
+  df = pd.DataFrame([[10,10,10], [30,30,0], [50,10, -10]])
 
+  df = dp.robust_zscoring(df)
+  
+  check_df = pd.DataFrame([[-1.,0.,1.], [0.,2.,0.], [1.,0., -1.]])
+
+  assert df.equals(check_df)
