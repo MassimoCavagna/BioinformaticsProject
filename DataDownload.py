@@ -1,4 +1,4 @@
-def download_cell_lines(cell_lines : list) -> Dict, Dict:
+def download_cell_lines(cell_lines : list):
   """
     This function download and resurn the epigenomic data and labels of the requested cellular lines
     
