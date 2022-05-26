@@ -4,9 +4,9 @@ import numpy as np
 from tqdm import tqdm
 
 
-def download_cell_lines(cell_lines : list):
+def download_cell_lines(cell_lines : list, window_sizes : list = [2**x for x in range(6, 11)]):
 
-  window_sizes = [2**x for x in range(6, 11)]
+  window_sizes = window_sizes
 
   original_epig = {}
   original_labels = {}
