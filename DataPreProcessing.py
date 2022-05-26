@@ -144,3 +144,27 @@ def over_sampling(X : np.array, y : np.array, balance_ratio : float = 1/10, meth
     X_resampled, y_resampled = smote_enn.fit_resample(X, y)
     
   return X_resampled, y_resampled
+
+################################################################################
+
+# Outliers drop
+
+def drop_outliers(df: pd.DataFrame, whis: float = 1.5):
+  """
+  This function scans all the features of the given DataFrame and drops (inplace) all the rows (of the corresponding feature)
+  whose value is an outliers: a value is considered an outlier according to the matplotlib boxplot definition.
+  Params:
+    - df: the dataframe to be cleaned
+    - whis: the whisker param (see matplotlib boxplot's docs for more info)
+  Return:
+    None: the drope is made 'inplace'
+  """
+
+  for col in df.columns:
+    first_quartile = df[col].quantile(q = .25)
+    third_quartile = df[col].quantile(q = .75)
+    whis_iqr = whis*(third_quartile - first_quartile)
+    up_thr = third_quartile + whis_iqr
+    lo_thr = first_quartile - whis_iqr
+    df.drop((df.index[df[col]] < lo_thr), inplace = True)
+    df.drop((df.index[df[col]] > up_thr), inplace = True)
