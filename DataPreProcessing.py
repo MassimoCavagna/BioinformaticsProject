@@ -149,12 +149,13 @@ def over_sampling(X : np.array, y : np.array, balance_ratio : float = 1/10, meth
 
 # Outliers drop
 
-def drop_outliers(df: pd.DataFrame, whis: float = 1.5):
+def drop_outliers(df: pd.DataFrame, labels: pd.DataFrame ,whis: float = 1.5):
   """
   This function scans all the features of the given DataFrame and drops (inplace) all the rows (of the corresponding feature)
   whose value is an outliers: a value is considered an outlier according to the matplotlib boxplot definition.
   Params:
     - df: the dataframe to be cleaned
+    - labels: the dataframe containing the corresponding labels
     - whis: the whisker param (see matplotlib boxplot's docs for more info)
   Return:
     None: the drope is made 'inplace'
@@ -166,5 +167,14 @@ def drop_outliers(df: pd.DataFrame, whis: float = 1.5):
     whis_iqr = whis*(third_quartile - first_quartile)
     up_thr = third_quartile + whis_iqr
     lo_thr = first_quartile - whis_iqr
-    df.drop((df.index[df[col] < lo_thr]), inplace = True)
-    df.drop((df.index[df[col] > up_thr]), inplace = True)
+    
+    to_be_dropped = df.index[df[col] < lo_thr]
+    
+    df.drop(to_be_dropped, inplace = True)
+    labels.drop(to_be_dropped, inplace = True)
+    
+    to_be_dropped = df.index[df[col] > up_thr]
+    
+    df.drop(to_be_dropped, inplace = True)
+    labels.drop(to_be_dropped, inplace = True)
+    
