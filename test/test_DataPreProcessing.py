@@ -96,3 +96,11 @@ def test_over_sampling():
   assert (sum( (y==1) ) == int(1/4 * ( sum(y==-1) )) and
           round(v, 1) == round(1/4, 1)
          )
+
+def test_drop_outliers():
+  d = pd.DataFrame([[1,2,5000],[1,2,-100],[69, 2, -100],[69, 2, -100],[69, 2, -100]], columns = ["a", "b", "c"])
+
+
+  dp.drop_outliers(d)
+
+  assert 0 not in d.index
