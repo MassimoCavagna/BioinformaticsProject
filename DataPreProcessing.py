@@ -166,5 +166,5 @@ def drop_outliers(df: pd.DataFrame, whis: float = 1.5):
     whis_iqr = whis*(third_quartile - first_quartile)
     up_thr = third_quartile + whis_iqr
     lo_thr = first_quartile - whis_iqr
-    df.drop((df.index[df[col]] < lo_thr), inplace = True)
-    df.drop((df.index[df[col]] > up_thr), inplace = True)
+    df.drop((df.index[df[col] < lo_thr]), inplace = True)
+    df.drop((df.index[df[col] > up_thr]), inplace = True)
