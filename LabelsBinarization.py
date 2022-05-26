@@ -1,6 +1,6 @@
 import pandas as pd
 
-def binarize_labels(label_df: pd.DataFrame, threshold: tuple, values_to_return: tuple = (-1,1))->pd.DataFrame:
+def binarize_labels(label_df: pd.DataFrame, threshold: tuple, values_to_return: tuple = (0,1))->pd.DataFrame:
   """
   This functions binarize the labels in the 'label_df' according to the given threshold.
   
@@ -20,7 +20,7 @@ def binarize_labels(label_df: pd.DataFrame, threshold: tuple, values_to_return: 
                                               )     
   return label_df.copy().applymap(f)
 
-def binarize_and_drop(data: dict, labels: dict, thresholds: list = [(0, 1), (0, 5)]):
+def binarize_and_drop(data: dict, labels: dict, thresholds: list = [(0, 1), (0, 5)], values_to_return: tuple = (0,1)):
   """
   This function calls the 'binarize_labels' function and drops (inplace) the None values obtained both on the labels' dataframes
   Parameters:
