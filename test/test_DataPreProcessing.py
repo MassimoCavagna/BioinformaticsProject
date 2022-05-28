@@ -98,9 +98,9 @@ def test_over_sampling():
          )
 
 def test_drop_outliers():
-  d = pd.DataFrame([[1,2,5000],[1,2,-100],[69, 2, -100],[69, 2, -100],[69, 2, -100]], columns = ["a", "b", "c"])
+  d = pd.DataFrame([[-10000,-10000,-10000,-10000,5000],[1,1,1,2,-100],[1,1,69, 2, -100],[1,1,69, 2, -100],[69, 2, -100]], columns = ["a", "b", "c","d","e"])
   labels = pd.DataFrame([1,1,1,1,1])
 
-  dp.drop_outliers(d, labels)
-
+  dp.drop_outliers(d, labels,1)
+  print(d)
   assert 0 not in d.index
