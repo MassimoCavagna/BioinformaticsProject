@@ -169,4 +169,37 @@ def drop_outliers(df: pd.DataFrame, labels: pd.DataFrame , n_std: float = 3.5):
     df.drop(to_be_dropped, inplace = True)
     labels.drop(to_be_dropped, inplace = True)
     
-    
+################################################################################
+
+# Correlation
+def pearson(epig: dict, labels: dict, uncorrelated: dict, p_value_threshold: float = 0.01, correlation_threshold: float = 0.05)
+
+  p_value_threshold = 0.01
+  correlation_threshold = 0.05
+
+
+  for region, x in epig.items():
+      for column in tqdm(x.columns, desc=f"Running Pearson test for {region}\n", dynamic_ncols=True, leave=False):
+          correlation, p_value = pearsonr(x[column].values.ravel(), labels[region].values.ravel())
+          if p_value > p_value_threshold:
+              uncorrelated[region].add(column)
+
+
+def spearman(epig: dict, labels: dict, uncorrelated: dict, p_value_threshold: float = 0.01):
+  for region, x in epig.items():
+    for column in tqdm(x.columns, desc=f"Running Spearman test for {region}", dynamic_ncols=True, leave=False):
+        correlation, p_value = spearmanr(x[column].values.ravel(), labels[region].values.ravel())
+        if p_value > p_value_threshold:
+            uncorrelated[region].add(column)
+
+def MINE_corr(epig: dict, labels: dict, uncorrelated: dict, correlation_threshold: float = 0.05):
+  for region, x in epig.items():
+    for column in tqdm(uncorrelated[region], desc=f"Running MINE test for {region}", dynamic_ncols=True, leave=False):
+        mine = MINE()
+        mine.compute_score(x[column].values.ravel(), labels[region].values.ravel())
+        score = mine.mic()
+        if score < correlation_threshold:
+            #print(region, column, score)
+            print()
+        else:
+            uncorrelated[region].remove(column)
