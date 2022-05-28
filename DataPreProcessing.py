@@ -172,7 +172,7 @@ def drop_outliers(df: pd.DataFrame, labels: pd.DataFrame , n_std: float = 3.5):
 ################################################################################
 
 # Correlation
-def pearson(epig: dict, labels: dict, uncorrelated: dict, p_value_threshold: float = 0.01, correlation_threshold: float = 0.05)
+def pearson(epig: dict, labels: dict, uncorrelated: dict, p_value_threshold: float = 0.01, correlation_threshold: float = 0.05):
 
   p_value_threshold = 0.01
   correlation_threshold = 0.05
