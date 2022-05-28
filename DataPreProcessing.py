@@ -3,6 +3,7 @@ import numpy as np
 from sklearn.impute import KNNImputer
 from sklearn.preprocessing import RobustScaler
 from typing import Callable
+from tqdm import tqdm
 
 def max_axis_nan(epig: dict, keys: list, columns: list,  axis: int = 0, relative : bool = False) -> pd.DataFrame:
   """
