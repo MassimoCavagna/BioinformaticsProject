@@ -146,7 +146,7 @@ def over_sampling(X : np.array, y : np.array, balance_ratio : float = 1/10, meth
   return X_resampled, y_resampled
 
 ################################################################################
-
+import scipy.stats as ss
 # Outliers drop
 
 def drop_outliers(df: pd.DataFrame, labels: pd.DataFrame , n_std: float = 3.5):
@@ -162,10 +162,9 @@ def drop_outliers(df: pd.DataFrame, labels: pd.DataFrame , n_std: float = 3.5):
   """
 
   for col in df.columns:
-    sigma = np.std(df[col])
-    mu = np.mean(df[col])
-    
-    to_be_dropped = df.index[np.abs((df[col]-mu)/sigma) > n_std]
+    sigma = ss.median_absolute_deviation(df[col])
+    mu = np.median(df[col])
+    to_be_dropped = df.index[np.abs( (0.6745*(df[col]-mu)) / sigma) > n_std]
     
     df.drop(to_be_dropped, inplace = True)
     labels.drop(to_be_dropped, inplace = True)
