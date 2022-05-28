@@ -177,20 +177,41 @@ def drop_outliers(df: pd.DataFrame, labels: pd.DataFrame , n_std: float = 3.5):
 ################################################################################
 
 # Correlation
-def pearson(epig: dict, labels: dict, uncorrelated: dict, p_value_threshold: float = 0.01, correlation_threshold: float = 0.05):
-
-  p_value_threshold = 0.01
-  correlation_threshold = 0.05
-
-
+def pearson(epig: dict, labels: dict, uncorrelated: dict, p_value_threshold: float = 0.01):
+  """
+    This function add in the "uncorrelated" dictionary, for each region
+    the set of features that are correlated (by pearson) voer the passed parameters
+    with the labels
+    Params:
+      -epig: a dicitonary containing the datasets for the different
+             regions and window size
+      -labels: the labels of the regions
+      -uncorrelated: the dictionary in which save the low correlated features
+      -p_value_threshold: the pvalue checked when deciding if save teh feature or not
+    Return:
+      None, all the modifies are done in place
+  """
   for region, x in epig.items():
       for column in tqdm(x.columns, desc=f"Running Pearson test for {region}\n", dynamic_ncols=True, leave=False):
-          correlation, p_value = pearsonr(x[column].values.ravel(), labels[region].values.ravel())
+          _, p_value = pearsonr(x[column].values.ravel(), labels[region].values.ravel())
           if p_value > p_value_threshold:
               uncorrelated[region].add(column)
 
 
 def spearman(epig: dict, labels: dict, uncorrelated: dict, p_value_threshold: float = 0.01):
+  """
+    This function add in the "uncorrelated" dictionary, for each region
+    the set of features that are lowly correlated (by spearman) voer the passed parameters
+    with the labels
+    Params:
+      -epig: a dicitonary containing the datasets for the different
+             regions and window size
+      -labels: the labels of the regions
+      -uncorrelated: the dictionary in which save the low correlated features
+      -p_value_threshold: the pvalue checked when deciding if save teh feature or not
+    Return:
+      None, all the modifies are done in place
+  """
   for region, x in epig.items():
     for column in tqdm(x.columns, desc=f"Running Spearman test for {region}", dynamic_ncols=True, leave=False):
         correlation, p_value = spearmanr(x[column].values.ravel(), labels[region].values.ravel())
@@ -198,13 +219,26 @@ def spearman(epig: dict, labels: dict, uncorrelated: dict, p_value_threshold: fl
             uncorrelated[region].add(column)
 
 def MINE_corr(epig: dict, labels: dict, uncorrelated: dict, correlation_threshold: float = 0.05):
+  """
+    This function check if the features in the "uncorrelated" dictionary
+    are effectively uncorrelated (by MINE) or not, in the second case it removes
+    the feature
+    Params:
+      -epig: a dicitonary containing the datasets for the different
+             regions and window size
+      -labels: the labels of the regions
+      -uncorrelated: the dictionary in which save the low correlated features
+      -correlation_threshold: the threshold under which a feature is considered
+                              "uncorrelated"
+    Return:
+      None, all the modifies are done in place
+  """
   for region, x in epig.items():
     for column in tqdm(uncorrelated[region], desc=f"Running MINE test for {region}", dynamic_ncols=True, leave=False):
         mine = MINE()
         mine.compute_score(x[column].values.ravel(), labels[region].values.ravel())
         score = mine.mic()
         if score < correlation_threshold:
-            #print(region, column, score)
-            print()
+            pass
         else:
             uncorrelated[region].remove(column)
