@@ -234,7 +234,8 @@ def MINE_corr(epig: dict, labels: dict, uncorrelated: dict, correlation_threshol
       None, all the modifies are done in place
   """
   for region, x in epig.items():
-    for column in tqdm(uncorrelated[region], desc=f"Running MINE test for {region}", dynamic_ncols=True, leave=False):
+    unc_region = list(uncorrelated[region])
+    for column in tqdm(unc_region, desc=f"Running MINE test for {region}", dynamic_ncols=True, leave=False):
         mine = MINE()
         mine.compute_score(x[column].values.ravel(), labels[region].values.ravel())
         score = mine.mic()
