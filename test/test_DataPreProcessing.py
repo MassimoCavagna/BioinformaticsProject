@@ -104,3 +104,32 @@ def test_drop_outliers():
   dp.drop_outliers(d, labels,1)
   print(d)
   assert 0 not in d.index
+
+def test_pearson():
+  data = {"a": pd.DataFrame([[1,-1, 1],[4,-4,-4],[9,-9,9],[16,-16,-16],[25,-25,25]], columns = ["e", "p", "i",])}
+  labels = {"a" : pd.DataFrame([1,1,1,0,0], columns = ["label"])}
+  uncorrelated = {k:set() for k in data.keys()}
+
+  dp.pearson(data, labels, uncorrelated)
+
+  assert "i" in uncorrelated["a"]
+
+def test_spearman():
+  data = {"a": pd.DataFrame([[1,-1, 1],[4,-4,-4],[9,-9,9],[16,-16,-16],[25,-25,25]], columns = ["e", "p", "i",])}
+  labels = {"a" : pd.DataFrame([1,2,3,4,5], columns = ["label"])}
+  uncorrelated = {k:set() for k in data.keys()}
+
+  dp.spearman(data, labels, uncorrelated)
+  print(uncorrelated)
+
+  assert "i" in uncorrelated["a"]
+
+def test_MINE_corr():
+  data = {"a": pd.DataFrame([[1,-1, 1,1],[4,-4,-4,1],[9,-9,9,1],[16,-16,-16,1],[25,-25,25,1]], columns = ["e", "p", "i","g"])}
+  labels = {"a" : pd.DataFrame([1,2,3,4,5], columns = ["label"])}
+  uncorrelated = {k:set(["i", "g"]) for k in data.keys()}
+
+  dp.MINE_corr(data, labels, uncorrelated)
+  print(uncorrelated)
+
+  assert "i" not in uncorrelated["a"] and "g" in uncorrelated["a"]
