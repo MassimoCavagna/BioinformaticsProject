@@ -192,7 +192,7 @@ def pearson(epig: dict, labels: dict, uncorrelated: dict, p_value_threshold: flo
       None, all the modifies are done in place
   """
   for region, x in epig.items():
-      for column in tqdm(x.columns, desc=f"Running Pearson test for {region}\n", dynamic_ncols=True, leave=False):
+      for column in tqdm(x.columns, desc=f"Running Pearson test for {region}", dynamic_ncols=True, leave=False):
           _, p_value = pearsonr(x[column].values.ravel(), labels[region].values.ravel())
           if p_value > p_value_threshold:
               uncorrelated[region].add(column)
