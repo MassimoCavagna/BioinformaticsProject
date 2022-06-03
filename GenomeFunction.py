@@ -1,3 +1,6 @@
+import pandas as pd
+import numpy as np
+
 def to_bed(data:pd.DataFrame)->pd.DataFrame:
     """Return bed coordinates from given dataset."""
     return data.reset_index()[data.index.names]
@@ -31,7 +34,7 @@ def to_dataframe(x:np.ndarray, window_size:int, nucleotides:str="ACTG")->pd.Data
   Return:
     The dataframe containing the sequence encoded
   """
-    return pd.DataFrame(
+  return pd.DataFrame(
         x,
         columns = [
             f"{i}{nucleotide}"
