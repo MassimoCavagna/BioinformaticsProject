@@ -243,3 +243,53 @@ def MINE_corr(epig: dict, labels: dict, uncorrelated: dict, correlation_threshol
             pass
         else:
             uncorrelated[region].remove(column)
+def drop_correlated_feature(data : dict, p_value_threshold: int = 0.05, correlation_threshold: int = 0.9):
+  """
+  This function drops the highly correlated features (detected by spearson)
+  
+  Params:
+      -data: a dicitonary containing the datasets for the different
+             regions and window size
+      -p_value_threshold: the pvalue checked when deciding if save teh feature or not
+      -correlation_threshold: the threshold under which a feature is considered
+                              "uncorrelated"
+   Return:
+     The dictionary containing the correlation score of the features and the dictionary of the extreme
+     correlated features with the relative scores
+  
+  """
+  extremely_correlated = {
+      region: set()
+      for region in data
+  }
+
+  scores = {
+      region: []
+      for region in data
+  }
+
+  for region, x in data.items():
+      for i, column in tqdm(
+          enumerate(x.columns),
+          total=len(x.columns), desc=f"Running Pearson test for {region}", dynamic_ncols=True, position=0, leave=True):
+
+          for feature in x.columns[i+1:]:
+              correlation, p_value = pearsonr(x[column].values.ravel(), x[feature].values.ravel())
+              correlation = np.abs(correlation)
+              scores[region].append((correlation, column, feature))
+              if p_value < p_value_threshold and correlation > correlation_threshold:
+                  print("\n high correlation: ", region, column, feature, correlation)
+                  if entropy(x[column]) > entropy(x[feature]):
+                      extremely_correlated[region].add(feature)
+                  else:
+                      extremely_correlated[region].add(column)
+
+  scores = {
+      region:sorted(score, reverse=True)
+      for region, score in scores.items()
+  }
+
+  for key in extremely_correlated.keys():
+      data[key].drop(columns = extremely_correlated[key], inplace = True)
+  
+  return scores, extremely_correlated
