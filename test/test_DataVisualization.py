@@ -13,5 +13,7 @@ def test_pca():
   data = dv.pca(data, 2)
   assert data.shape == (50,2)
   
-# def test_cannylab_tsne():
-#   assert False
+def test_cannylab_tsne():
+  data = np.array([np.random.randint(0,100, 50) for _ in range(60)])
+  res = dv.cannylab_tsne(data, 50)
+  assert res.shape == (60, 2)
