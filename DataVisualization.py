@@ -2,6 +2,7 @@ from sklearn.manifold import TSNE as STSNE
 from sklearn.decomposition import PCA
 from tsnecuda import TSNE as CTSNE
 from multiprocessing import cpu_count
+import numpy as np
 
 def pca(x:np.ndarray, n_components:int=2)->np.ndarray:
   """
@@ -12,7 +13,8 @@ def pca(x:np.ndarray, n_components:int=2)->np.ndarray:
   Return:
     The reduced data
   """
-  return PCA(n_components=n_components, random_state=42).fit_transform(x)
+  res = PCA(n_components=n_components, random_state=42)
+  return res.fit_transform(x)
     
 def cannylab_tsne(x:np.ndarray, perplexity:int, dimensionality_threshold:int=50):
   """
