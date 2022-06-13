@@ -3,7 +3,7 @@ import pytest
 import pandas as pd
 import sys, os
 
-sys.path.insert(0, os.path.abspath('/content/BioinformaticsProject'))
+sys.path.insert(0, os.path.abspath('/content/BioinformaticsProject/v_test'))
 
 import DataVisualization as dv
 
