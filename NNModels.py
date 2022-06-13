@@ -24,7 +24,7 @@ from tensorflow.data import Dataset
 
 import tensorflow as tf
 
-import matplotlib.pytplot as plt
+import matplotlib.pyplot as plt
 import numpy as np
 import pandas as pd
 import seaborn as sns
