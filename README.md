@@ -6,7 +6,7 @@ In particular on the cell line A549 and GM12878, obtained from FANTOM5 and ENCOD
 [![Project](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/drive/1cfXL4QpyIu-LjG6_aDH7kcJLTltTgDRk) The colab notebook containing the project
 
 [![Test](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/drive/1KSjc3EgSVWA2qVbrdOBDlr92gRj_vVdm) The colab notebook containing the code to run the tests
-
+```bash
 ---------- coverage: platform linux, python 3.7.13-final-0 -----------
 Name                                                    Stmts   Miss  Cover
 ---------------------------------------------------------------------------
@@ -38,4 +38,4 @@ TOTAL                                                       26      1    96%
 
 ============================== 2 passed in 3.99s ===============================
 
-
+```
